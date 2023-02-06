@@ -2,7 +2,9 @@ import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 import Labels from "./Labels";
-import axios from "../api/axios";
+import axios from "axios";
+import { BarsOutlined } from "@ant-design/icons";
+import { Button, Space, Modal } from "antd";
 
 import { useRef, useState, useEffect } from "react";
 
@@ -28,39 +30,15 @@ const config = {
   },
 };
 
-const GET_TOTAL = "/income?walletId=1";
-
 const Graph = () => {
-  // const [sum, setSum] = useState;
-  // const response = await axios.get(GET_TOTAL, JSON.stringify({ sum }), {
-  //   headers: { "Content-Type": "application/json" },
-  //   withCredentials: true,
-  // });
-  const getHyj = () => {
-    axios.get(GET_TOTAL).then((response) => {
-      console.log(response);
-    });
-    // axios.interceptors.response.use(
-    //   (response) => {
-    //     return response;
-    //   },
-    //   (error) => {
-    //     if (error.response.status === 401) {
-    //       JSON.stringify({ name: "string", password: "string" });
-    //     }
-    //     return error;
-    //   }
-    // );
-  };
-
   return (
     <div className="flex justify-content max-w-xs mx-auto">
-      <button onClick={getHyj}>GET</button>
+      <h1 className="text-2xl">Statistic</h1>
       <div className="item">
         <div className="chart relative">
           <Doughnut {...config}></Doughnut>
           <h3 className="mb-4 font-bold title">
-            Total
+            Expenses
             <span className="block text-3xl text-emerald-400">{0} $</span>
           </h3>
         </div>

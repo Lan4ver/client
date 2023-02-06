@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import List from "./List";
+import { Button, Space, Cascader } from "antd";
 
 export default function Form() {
   const { register, handleSubmit, resetField } = useForm();
@@ -19,7 +20,7 @@ export default function Form() {
             <input
               type="text"
               {...register("name")}
-              placeholder="Salary, House Rend, SIP"
+              placeholder="Expenses Name Here"
               className="form-input"
             ></input>
           </div>
