@@ -20,7 +20,7 @@ export default function Form() {
             <input
               type="text"
               {...register("name")}
-              placeholder="Expenses Name Here"
+              placeholder="Name transaction"
               className="form-input"
             ></input>
           </div>
@@ -39,9 +39,9 @@ export default function Form() {
             ></input>
           </div>
           <div className="submit-btn">
-            <button className="border py-2 text-white bg-indigo-500 w-full">
+            <Button type="primary" block>
               Make Transaction
-            </button>
+            </Button>
           </div>
         </div>
       </form>

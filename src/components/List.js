@@ -1,5 +1,6 @@
 import React from "react";
 import "boxicons";
+import { Button, Space } from "antd";
 
 const obj = [
   {
@@ -34,13 +35,13 @@ function Transaction({ category }) {
       className="item flex justify-center bg-gray-50 py-2 rounded-r"
       style={{ borderRight: `8px solid ${category.color ?? "#f9c74f"}` }}
     >
-      <button className="px-3">
+      <Button className="px-3">
         <box-icon
           color={category.color ?? "#f9c74f"}
           size="15px"
           name="trash"
         ></box-icon>
-      </button>
+      </Button>
       <span className="block w-full">{category.name ?? ""}</span>
     </div>
   );
