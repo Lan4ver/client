@@ -6,7 +6,12 @@ import { DatePickerProps } from "antd";
 import { Button, Space, Cascader, DatePicker } from "antd";
 import axios from "axios";
 import { useRef, useState, useEffect } from "react";
-import { getCostType, getAllIncome, postTransaction } from "../utils/endpoints";
+import {
+  getCostType,
+  getAllIncome,
+  postTransaction,
+  postNewIncome,
+} from "../utils/endpoints";
 
 export default function CreateTransaction() {
   const [income, setIncomeHistory] = useState([]);
@@ -48,22 +53,35 @@ export default function CreateTransaction() {
 
   const onCostTypeChange = (event) => {
     setCostTypeName(event.target.value);
-    setCostTypeId(JSON.parse(event.target.value).costTypeId);
-    console.log(JSON.parse(event.target.value).costTypeId);
+    setCostTypeId(costType.find((x) => x.name === event.target.value));
+    console.log(event.target.value);
   };
 
   const onSubmit = (data) => {
-    axios
-      .post(postTransaction, {
-        Name: name,
-        Sum: sum,
-        Date: date,
-        WalletId: walletId,
-        CostTypeId: costTypeId,
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (costTypeName === "Income") {
+      axios
+        .post(postNewIncome, {
+          Name: name,
+          Sum: sum,
+          Date: date,
+          WalletId: walletId,
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      axios
+        .post(postTransaction, {
+          Name: name,
+          Sum: sum,
+          Date: date,
+          WalletId: walletId,
+          CostTypeId: costTypeId,
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -87,11 +105,11 @@ export default function CreateTransaction() {
             className="form-input"
             onChange={onCostTypeChange}
           >
-            <option value="income" defaultValue>
+            <option value="Income" defaultValue>
               Investment
             </option>
             {costType?.map((i, index) => (
-              <option value={JSON.stringify(i)} defaultValue={index === 0}>
+              <option value={i.name} defaultValue={index === 0}>
                 {i.name}
               </option>
             ))}
