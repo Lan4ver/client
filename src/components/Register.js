@@ -52,6 +52,16 @@ const Register = () => {
       >
         Register
       </Button>
+      <Button
+        type="primary"
+        block
+        style={{
+          marginTop: "5px",
+        }}
+        onClick={() => navigate("/login")}
+      >
+        SIGN IN
+      </Button>
     </div>
   );
 };
