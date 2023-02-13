@@ -52,14 +52,9 @@ export function Transaction({ category, image }) {
   const Delete = () => {
     console.log(category);
     if (category.transactionType === "income") {
-      axios
-        .delete(deleteIncome(category.transactionId))
-        // .then((res) => {
-        //   getAllData();
-        // })
-        .catch((error) => {
-          console.error(error);
-        });
+      axios.delete(deleteIncome(category.transactionId)).catch((error) => {
+        console.error(error);
+      });
     } else {
       axios.delete(deleteTransaction(category.transactionId)).catch((error) => {
         console.error(error);

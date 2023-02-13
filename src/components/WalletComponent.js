@@ -13,6 +13,8 @@ import {
   postNewIncome,
   postNewTransaction,
   getAllStatistic,
+  deleteIncome,
+  deleteTransaction,
 } from "../utils/endpoints";
 import axios from "axios";
 
@@ -59,6 +61,32 @@ export default function WalletComponent({ wallet }) {
         });
     }
   };
+
+  // const [deleteIncomeTransaction, setDeleteIncomeTransaction] = useState([]);
+  // const [deleteCostTransaction, setDeleteCostTransaction] = useState([]);
+
+  // const deleteTransaction = (
+  //   category,
+  //   setDeleteIncomeTransaction,
+  //   setDeleteCostTransaction
+  // ) => {
+  //   setDeleteIncomeTransaction = axios
+  //     .delete(deleteIncome(category.transactionId))
+  //     .then((res) => {
+  //       getAllData();
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  //   setDeleteCostTransaction = axios
+  //     .delete(deleteTransaction(category.transactionId))
+  //     .then((res) => {
+  //       getAllData();
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const [walletTransactions, setWalletTransactions] = useState([]);
   const [allWalletTransactions, setAllWalletTransactions] = useState([]);
