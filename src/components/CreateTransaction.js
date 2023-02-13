@@ -11,44 +11,19 @@ import {
   getAllIncome,
   postTransaction,
   postNewIncome,
-  getAllTransaction,
-  getWalletTransaction,
 } from "../utils/endpoints";
 
-export default function CreateTransaction({ walletId }) {
-  ////////////////
-  const [walletTransaction, setWalletTransaction] = useState([]);
-
-  useEffect(() => {
-    if (walletId === undefined) {
-      axios
-        .get(getAllTransaction())
-        .then((response) => {
-          setWalletTransaction(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      axios
-        .get(getWalletTransaction(walletId))
-        .then((response) => {
-          setWalletTransaction(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, []);
-
-  ///////////////
+export default function CreateTransaction({
+  walletId,
+  post,
+  defaultTypeName = "Income",
+}) {
   const [income, setIncomeHistory] = useState([]);
   const [name, setName] = useState();
   const [sum, setSum] = useState(0);
   const [date, setDate] = useState("");
   const [costTypeId, setCostTypeId] = useState();
   const [costTypeName, setCostTypeName] = useState();
-  const defaultTypeName = "Income";
 
   const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -89,36 +64,7 @@ export default function CreateTransaction({ walletId }) {
   };
 
   const onSubmit = (data) => {
-    if (costTypeName === defaultTypeName) {
-      axios
-        .post(postNewIncome, {
-          WalletId: walletId,
-          Name: name,
-          Sum: sum,
-          Date: date,
-        })
-        .then((response) => {
-          forceUpdate();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      axios
-        .post(postTransaction, {
-          Name: name,
-          Sum: sum,
-          Date: date,
-          WalletId: walletId,
-          CostTypeId: costTypeId,
-        })
-        .then((response) => {
-          forceUpdate();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    post(costTypeName, walletId, name, date, sum, costTypeId);
   };
 
   return (
@@ -169,7 +115,6 @@ export default function CreateTransaction({ walletId }) {
           </div>
         </div>
       </form>
-      <TransactionHistory walletId={walletId}></TransactionHistory>
     </div>
   );
 }

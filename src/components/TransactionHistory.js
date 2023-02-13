@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
-export default function TransactionHistory({ walletId }) {
+export default function TransactionHistory({ walletTransactions }) {
   const [costImage, setCostImage] = useState([]);
   const CASH_IMAGE =
     "https://rwzydhznyespratlabcw.supabase.co/storage/v1/object/public/images/cash.png";
@@ -28,54 +28,18 @@ export default function TransactionHistory({ walletId }) {
       });
   }, []);
 
-  const [costsHistory, setCostsHistory] = useState([]);
-  const [incomeHistory, setIncomeHistory] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(getTransaction)
-      .then((response) => {
-        setCostsHistory(
-          response.data.filter(
-            (transaction) => transaction.walletId === walletId
-          )
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    axios
-      .get(getIncome(walletId))
-      .then((response) => {
-        setIncomeHistory(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
     <div className="flex flex-col py-6 gap-5">
       <h1 className=" text-md font-bold text-xl">History</h1>
       <Scrollbars style={{ height: 250 }}>
-        {incomeHistory.map((v, i) => {
+        {walletTransactions.map((v, i) => {
           return (
             <div className="py-1">
               <Transaction
-                image={CASH_IMAGE}
+                image={v.typeImage}
                 key={i}
                 category={v}
               ></Transaction>
-            </div>
-          );
-        })}
-        {costsHistory.map((v, i) => {
-          let Image = costImage?.find(
-            (image) => image.costTypeId === v.costTypeId
-          )?.image;
-          return (
-            <div className="py-1">
-              <Transaction image={Image} key={i} category={v}></Transaction>
             </div>
           );
         })}
@@ -87,13 +51,17 @@ export default function TransactionHistory({ walletId }) {
 export function Transaction({ category, image }) {
   const Delete = () => {
     console.log(category);
-    if (category.incomeId) {
-      axios.delete(deleteIncome(category.incomeId)).catch((error) => {
-        console.error(error);
-      });
-    }
-    if (category.costId) {
-      axios.delete(deleteTransaction(category.costId)).catch((error) => {
+    if (category.transactionType === "income") {
+      axios
+        .delete(deleteIncome(category.transactionId))
+        // .then((res) => {
+        //   getAllData();
+        // })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios.delete(deleteTransaction(category.transactionId)).catch((error) => {
         console.error(error);
       });
     }
@@ -112,8 +80,7 @@ export function Transaction({ category, image }) {
     >
       <img src={image} style={{ width: "30px", height: "100%" }}></img>
       <span>{category.name ?? ""}</span>
-      {category.sum ? <span>{category.sum + "$"}</span> : null}
-      {category.amount ? <span>{category.amount + "$"}</span> : null}
+      <span>{category.amount + "$"}</span>
       <Button
         onClick={() => {
           Delete();

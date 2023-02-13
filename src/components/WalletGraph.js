@@ -37,7 +37,7 @@ const options = {
   },
 };
 
-const WalletGraph = ({ walletId }) => {
+const WalletGraph = ({ walletId, walletInfo }) => {
   const [outcome, setOutcome] = useState();
 
   useEffect(() => {
@@ -60,30 +60,9 @@ const WalletGraph = ({ walletId }) => {
       });
   }, []);
 
-  const [walletInfo, setWalletInfo] = useState([]);
   const [doughnutConfig, setDoughnutConfig] = useState(config);
 
-  useEffect(() => {
-    if (walletId === undefined) {
-      axios
-        .get(getAllStatistic())
-        .then((response) => {
-          setWalletInfo(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      axios
-        .get(getWalletStatistic(walletId))
-        .then((response) => {
-          setWalletInfo(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (walletInfo) {

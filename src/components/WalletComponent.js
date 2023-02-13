@@ -5,14 +5,106 @@ import React from "react";
 import ModalWrapper from "./Modal";
 import TransactionHistory from "./TransactionHistory";
 import { useRef, useState, useEffect } from "react";
-import { getWalletStatistic, getTotal } from "../utils/endpoints";
+import {
+  getWalletStatistic,
+  getTotal,
+  getAllTransaction,
+  getWalletTransaction,
+  postNewIncome,
+  postNewTransaction,
+  getAllStatistic,
+} from "../utils/endpoints";
 import axios from "axios";
-import FullHistory from "./FullHistory";
 
 export default function WalletComponent({ wallet }) {
   const [totalBalance, setTotalBalance] = useState();
+  const defaultTypeName = "Income";
+
+  const postTransaction = (
+    costTypeName,
+    walletId,
+    name,
+    date,
+    sum,
+    costTypeId
+  ) => {
+    if (costTypeName === defaultTypeName) {
+      axios
+        .post(postNewIncome, {
+          WalletId: walletId,
+          Name: name,
+          Sum: sum,
+          Date: date,
+        })
+        .then((res) => {
+          getAllData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      axios
+        .post(postNewTransaction, {
+          Name: name,
+          Sum: sum,
+          Date: date,
+          WalletId: walletId,
+          CostTypeId: costTypeId,
+        })
+        .then((res) => {
+          getAllData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const [walletTransactions, setWalletTransactions] = useState([]);
+  const [allWalletTransactions, setAllWalletTransactions] = useState([]);
+
+  const [walletInfo, setWalletInfo] = useState([]);
+  const [allWalletInfo, setAllWalletInfo] = useState([]);
+
+  const getAllData = () => {
+    axios
+      .get(getAllTransaction())
+      .then((response) => {
+        setAllWalletTransactions(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    axios
+      .get(getWalletTransaction(wallet.walletId))
+      .then((response) => {
+        setWalletTransactions(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(getAllStatistic())
+      .then((response) => {
+        setAllWalletInfo(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(getWalletStatistic(wallet.walletId))
+      .then((response) => {
+        setWalletInfo(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
+    getAllData();
     axios
       .get(getTotal)
       .then((response) => {
@@ -33,16 +125,24 @@ export default function WalletComponent({ wallet }) {
           </span>
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
-          <WalletGraph walletId={wallet.walletId} />
-          <CreateTransaction walletId={wallet.walletId} />
+          <WalletGraph walletId={wallet.walletId} walletInfo={walletInfo} />
+          <div className="form max-w-sm mx-auto w-96">
+            <CreateTransaction
+              walletId={wallet.walletId}
+              post={postTransaction}
+            />
+            <TransactionHistory
+              walletTransactions={walletTransactions}
+            ></TransactionHistory>
+          </div>
           <div className="global-graph-container">
             <ModalWrapper buttonText="Full Wallet Statistics">
-              <WalletGraph />
+              <WalletGraph walletInfo={allWalletInfo} />
             </ModalWrapper>
           </div>
           <div style={{ paddingTop: "0px" }}>
             <ModalWrapper buttonText="Full History Statistics">
-              <FullHistory />
+              <TransactionHistory walletTransactions={allWalletTransactions} />
             </ModalWrapper>
           </div>
         </div>

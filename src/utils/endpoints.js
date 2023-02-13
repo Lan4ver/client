@@ -4,7 +4,7 @@ export const postLogin =
   "https://money-manager-228.herokuapp.com/account/authorize";
 export const postRegister =
   "https://money-manager-228.herokuapp.com/account/register";
-export const postTransaction =
+export const postNewTransaction =
   "https://money-manager-228.herokuapp.com/cost/add";
 export const getTransaction =
   "https://money-manager-228.herokuapp.com/cost/all";
