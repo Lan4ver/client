@@ -1,11 +1,18 @@
 import React from "react";
 import "boxicons";
-import { Button, Space, Modal } from "antd";
-import { useRef, useState, useEffect } from "react";
-import { getTransaction, getCostType, getIncome } from "../utils/endpoints";
+import { Button, Space, Modal, ColumnsType } from "antd";
+import { useRef, useState, useEffect, useReducer } from "react";
+import {
+  getTransaction,
+  getCostType,
+  getIncome,
+  deleteIncome,
+  deleteTransaction,
+} from "../utils/endpoints";
 import axios from "axios";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
-export default function TransactionHistory() {
+export default function TransactionHistory({ walletId }) {
   const [costImage, setCostImage] = useState([]);
   const CASH_IMAGE =
     "https://rwzydhznyespratlabcw.supabase.co/storage/v1/object/public/images/cash.png";
@@ -22,23 +29,23 @@ export default function TransactionHistory() {
   }, []);
 
   const [costsHistory, setCostsHistory] = useState([]);
+  const [incomeHistory, setIncomeHistory] = useState([]);
 
   useEffect(() => {
     axios
       .get(getTransaction)
       .then((response) => {
-        setCostsHistory(response.data);
+        setCostsHistory(
+          response.data.filter(
+            (transaction) => transaction.walletId === walletId
+          )
+        );
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-
-  const [incomeHistory, setIncomeHistory] = useState([]);
-
-  useEffect(() => {
     axios
-      .get(getIncome)
+      .get(getIncome(walletId))
       .then((response) => {
         setIncomeHistory(response.data);
       })
@@ -48,31 +55,52 @@ export default function TransactionHistory() {
   }, []);
 
   return (
-    <div className="flex flex-col py-6 gap-3">
-      <h1 className="py-4 text-md font-bold text-xl">History</h1>
-      {incomeHistory.map((v, i) => {
-        return (
-          <>
-            <Transaction image={CASH_IMAGE} key={i} category={v}></Transaction>
-          </>
-        );
-      })}
-      {costsHistory.map((v, i) => {
-        let Image = costImage?.find(
-          (image) => image.costTypeId === v.costTypeId
-        )?.image;
-        return (
-          <>
-            <Transaction image={Image} key={i} category={v}></Transaction>
-          </>
-        );
-      })}
+    <div className="flex flex-col py-6 gap-5">
+      <h1 className=" text-md font-bold text-xl">History</h1>
+      <Scrollbars style={{ height: 250 }}>
+        {incomeHistory.map((v, i) => {
+          return (
+            <div className="py-1">
+              <Transaction
+                image={CASH_IMAGE}
+                key={i}
+                category={v}
+              ></Transaction>
+            </div>
+          );
+        })}
+        {costsHistory.map((v, i) => {
+          let Image = costImage?.find(
+            (image) => image.costTypeId === v.costTypeId
+          )?.image;
+          return (
+            <div className="py-1">
+              <Transaction image={Image} key={i} category={v}></Transaction>
+            </div>
+          );
+        })}
+      </Scrollbars>
     </div>
   );
 }
 
-function Transaction({ category, image }) {
+export function Transaction({ category, image }) {
+  const Delete = () => {
+    console.log(category);
+    if (category.incomeId) {
+      axios.delete(deleteIncome(category.incomeId)).catch((error) => {
+        console.error(error);
+      });
+    }
+    if (category.costId) {
+      axios.delete(deleteTransaction(category.costId)).catch((error) => {
+        console.error(error);
+      });
+    }
+  };
+
   if (!category) return null;
+
   return (
     <div
       style={{
@@ -84,8 +112,13 @@ function Transaction({ category, image }) {
     >
       <img src={image} style={{ width: "30px", height: "100%" }}></img>
       <span>{category.name ?? ""}</span>
-      <span>{category.sum ?? ""}$</span>
-      <Button>
+      {category.sum ? <span>{category.sum + "$"}</span> : null}
+      {category.amount ? <span>{category.amount + "$"}</span> : null}
+      <Button
+        onClick={() => {
+          Delete();
+        }}
+      >
         <box-icon
           color={category.color ?? "#f9c74f"}
           size="15px"

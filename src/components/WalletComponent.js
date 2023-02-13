@@ -5,10 +5,11 @@ import React from "react";
 import ModalWrapper from "./Modal";
 import TransactionHistory from "./TransactionHistory";
 import { useRef, useState, useEffect } from "react";
-import { getAllFromWallets, getTotal } from "../utils/endpoints";
+import { getWalletStatistic, getTotal } from "../utils/endpoints";
 import axios from "axios";
+import FullHistory from "./FullHistory";
 
-export default function WalletComponent() {
+export default function WalletComponent({ wallet }) {
   const [totalBalance, setTotalBalance] = useState();
 
   useEffect(() => {
@@ -32,22 +33,16 @@ export default function WalletComponent() {
           </span>
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
-          <WalletGraph />
-          <CreateTransaction />
+          <WalletGraph walletId={wallet.walletId} />
+          <CreateTransaction walletId={wallet.walletId} />
           <div className="global-graph-container">
-            <ModalWrapper
-              title="Wallet name"
-              buttonText="Full Wallet Statistics"
-            >
+            <ModalWrapper buttonText="Full Wallet Statistics">
               <WalletGraph />
             </ModalWrapper>
           </div>
-          <div>
-            <ModalWrapper
-              title="Wallet name"
-              buttonText="Full History Statistics"
-            >
-              <TransactionHistory />
+          <div style={{ paddingTop: "0px" }}>
+            <ModalWrapper buttonText="Full History Statistics">
+              <FullHistory />
             </ModalWrapper>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { getStatistic, getCostType } from "../utils/endpoints";
 import { useRef, useState, useEffect } from "react";
+import { getAllFromWallets, getWalletStatistic } from "../utils/endpoints";
 
 const obj = [
   {
@@ -21,43 +22,14 @@ const obj = [
   },
 ];
 
-export default function TransactionSummary() {
-  const [costImage, setCostImage] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(getCostType)
-      .then((response) => {
-        setCostImage(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  const [statistic, setStatistic] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(getStatistic)
-      .then((response) => {
-        setStatistic(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
+export default function TransactionSummary({ walletInfo }) {
   return (
     <>
-      {statistic.map((v, i) => {
-        let Image = costImage?.find(
-          (image) => image.costTypeId === v.costTypeId
-        )?.image;
+      {walletInfo.map((v, i) => {
         return (
           <>
             {/* {v?.name} */}
-            <LabelComponent image={Image} key={i} data={v}></LabelComponent>
+            <LabelComponent image={v.image} key={i} data={v}></LabelComponent>
           </>
         );
       })}
@@ -74,10 +46,11 @@ function LabelComponent({ data, image }) {
           className="w-2 h-2 rounded py-3"
           style={{ background: data.color ?? "#f9c74f" }}
         ></div>
+        <img src={image} style={{ width: "30px", height: "100%" }}></img>
         <span>{data.name ?? ""}</span>
         <h3>{data.ty4 ?? ""}</h3>
       </div>
-      <h3 className="font-bold">{data.percent ?? 0}%</h3>
+      <h3 className="font-bold">{data.percent ?? 0}</h3>
     </div>
   );
 }

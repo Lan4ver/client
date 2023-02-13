@@ -7,7 +7,11 @@ import { BarsOutlined } from "@ant-design/icons";
 import { Button, Space, Modal } from "antd";
 import ModalWrapper from "./Modal";
 import { useRef, useState, useEffect } from "react";
-import { getAllFromWallets, getWalletStatistic } from "../utils/endpoints";
+import {
+  getAllFromWallets,
+  getWalletStatistic,
+  getAllStatistic,
+} from "../utils/endpoints";
 
 Chart.register(ArcElement);
 
@@ -33,19 +37,52 @@ const options = {
   },
 };
 
-const WalletGraph = () => {
-  const [walletInfo, setWalletInfo] = useState([]);
-  const [doughnutConfig, setDoughnutConfig] = useState(config);
+const WalletGraph = ({ walletId }) => {
+  const [outcome, setOutcome] = useState();
 
   useEffect(() => {
     axios
-      .get(getWalletStatistic)
+      .get(getAllFromWallets)
       .then((response) => {
-        setWalletInfo(response.data);
+        if (walletId === undefined) {
+          let allOutcome = 0;
+          response.data.forEach((element) => {
+            allOutcome += element.outcome;
+          });
+          setOutcome(allOutcome);
+        } else {
+          let wallet = response.data.find((x) => x.walletId === walletId);
+          setOutcome(wallet.outcome);
+        }
       })
       .catch((error) => {
         console.error(error);
       });
+  }, []);
+
+  const [walletInfo, setWalletInfo] = useState([]);
+  const [doughnutConfig, setDoughnutConfig] = useState(config);
+
+  useEffect(() => {
+    if (walletId === undefined) {
+      axios
+        .get(getAllStatistic())
+        .then((response) => {
+          setWalletInfo(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .get(getWalletStatistic(walletId))
+        .then((response) => {
+          setWalletInfo(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -54,7 +91,7 @@ const WalletGraph = () => {
         data: {
           datasets: [
             {
-              data: walletInfo.map((type) => type.percent),
+              data: walletInfo.map((type) => type.percent.replace(" %", "")),
               backgroundColor: walletInfo.map((type) => type.color),
               hoverOffset: 4,
               borderRadius: 30,
@@ -71,18 +108,29 @@ const WalletGraph = () => {
   return (
     <div className="flex justify-content max-w-xs mx-auto">
       <div className="global-graph-container"></div>
-      <h1 className="text-2xl">Statistic</h1>
+      {walletId !== undefined ? <h1 className="text-2xl">Statistic</h1> : null}
       <div className="item">
         <div className="chart relative">
           <Doughnut {...doughnutConfig}></Doughnut>
-          <h3 className="mb-4 font-bold title">
-            Expenses
-            <span className="block text-3xl text-emerald-400">{0} $</span>
-          </h3>
+          {walletId !== undefined ? (
+            <h3 className="mb-4 font-bold title">
+              Expenses
+              <span className="block text-3xl text-emerald-400">
+                -{outcome} $
+              </span>
+            </h3>
+          ) : (
+            <h3 className="mb-4 font-bold title" style={{ marginLeft: "10px" }}>
+              Expenses
+              <span className="block text-3xl text-emerald-400">
+                -{outcome} $
+              </span>
+            </h3>
+          )}
         </div>
         <div className="flex flex-col py-10 gap-4">
           {/* {labels} */}
-          <TransactionSummary></TransactionSummary>
+          <TransactionSummary walletInfo={walletInfo}></TransactionSummary>
         </div>
       </div>
     </div>

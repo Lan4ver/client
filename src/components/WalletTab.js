@@ -6,7 +6,7 @@ import WalletComponent from "./WalletComponent";
 import ModalWrapper from "./Modal";
 import WalletGraph from "./WalletGraph";
 import axios from "axios";
-import { postNewWallet, getAllWallets } from "../utils/endpoints";
+import { postNewWallet, getAllWallets, deleteWallet } from "../utils/endpoints";
 
 const { confirm } = Modal;
 
@@ -37,7 +37,7 @@ function WalletTab() {
           newActiveKey = `newTab${newTabIndex.current++}`;
           newPanes.push({
             label: item.name,
-            children: <WalletComponent></WalletComponent>,
+            children: <WalletComponent wallet={item}></WalletComponent>,
             key: newActiveKey,
           });
         });
@@ -53,19 +53,17 @@ function WalletTab() {
     setActiveKey(newActiveKey);
   };
 
-  const add = () => {
-    const newActiveKey = `newTab${newTabIndex.current++}`;
-    const newPanes = [...items];
-    newPanes.push({
-      label: walletName, //
-      children: <WalletComponent></WalletComponent>,
-      key: newActiveKey,
-    });
-    setItems(newPanes);
-    setActiveKey(newActiveKey);
-  };
-
   const remove = (targetKey) => {
+    axios
+      .delete(
+        deleteWallet(
+          items.find((pane) => pane.key === targetKey).children.props.wallet
+            .walletId
+        )
+      )
+      .catch((error) => {
+        console.error(error);
+      });
     let newActiveKey = activeKey;
     let lastIndex = -1;
     items.forEach((item, i) => {
@@ -91,11 +89,21 @@ function WalletTab() {
 
   const handleOk = () => {
     if (walletName && walletName.trim().length > 0) {
-      add();
       axios
         .post(postNewWallet, {
           Name: walletName,
           CurrencyId: "1",
+        })
+        .then((res) => {
+          const newActiveKey = `newTab${newTabIndex.current++}`;
+          const newPanes = [...items];
+          newPanes.push({
+            label: walletName, //
+            children: <WalletComponent wallet={res.data}></WalletComponent>,
+            key: newActiveKey,
+          });
+          setItems(newPanes);
+          setActiveKey(newActiveKey);
         })
         .catch((error) => {
           console.log(error);

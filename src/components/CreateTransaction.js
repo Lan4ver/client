@@ -5,7 +5,7 @@ import TransactionHistory from "./TransactionHistory";
 import { DatePickerProps } from "antd";
 import { Button, Space, Cascader, DatePicker } from "antd";
 import axios from "axios";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useReducer } from "react";
 import {
   getCostType,
   getAllIncome,
@@ -13,25 +13,27 @@ import {
   postNewIncome,
 } from "../utils/endpoints";
 
-export default function CreateTransaction() {
+export default function CreateTransaction({ walletId }) {
   const [income, setIncomeHistory] = useState([]);
   const [name, setName] = useState();
   const [sum, setSum] = useState(0);
   const [date, setDate] = useState("");
   const [costTypeId, setCostTypeId] = useState();
-  const [walletId, setWalletId] = useState();
   const [costTypeName, setCostTypeName] = useState();
+  const defaultTypeName = "Income";
+
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     axios
       .get(getAllIncome)
       .then((response) => {
         setIncomeHistory(response.data);
-        if (response.data.length > 0) setWalletId(response.data[0].walletId);
       })
       .catch((error) => {
         console.error(error);
       });
+    setCostTypeName(defaultTypeName);
   }, []);
 
   const [costType, setCostType] = useState([]);
@@ -53,18 +55,22 @@ export default function CreateTransaction() {
 
   const onCostTypeChange = (event) => {
     setCostTypeName(event.target.value);
-    setCostTypeId(costType.find((x) => x.name === event.target.value));
-    console.log(event.target.value);
+    setCostTypeId(
+      costType.find((x) => x.name === event.target.value).costTypeId
+    );
   };
 
   const onSubmit = (data) => {
-    if (costTypeName === "Income") {
+    if (costTypeName === defaultTypeName) {
       axios
         .post(postNewIncome, {
+          WalletId: walletId,
           Name: name,
           Sum: sum,
           Date: date,
-          WalletId: walletId,
+        })
+        .then((response) => {
+          forceUpdate();
         })
         .catch((error) => {
           console.log(error);
@@ -78,6 +84,9 @@ export default function CreateTransaction() {
           WalletId: walletId,
           CostTypeId: costTypeId,
         })
+        .then((response) => {
+          forceUpdate();
+        })
         .catch((error) => {
           console.log(error);
         });
@@ -87,7 +96,6 @@ export default function CreateTransaction() {
   return (
     <div className="form max-w-sm mx-auto w-96">
       <h1 className="font-bold pb-4 text-xl">Transaction</h1>
-
       <form id="form">
         <div className="grid gap-4">
           <div className="input-group">
@@ -105,13 +113,11 @@ export default function CreateTransaction() {
             className="form-input"
             onChange={onCostTypeChange}
           >
-            <option value="Income" defaultValue>
+            <option value={defaultTypeName} defaultValue>
               Investment
             </option>
             {costType?.map((i, index) => (
-              <option value={i.name} defaultValue={index === 0}>
-                {i.name}
-              </option>
+              <option value={i.name}>{i.name}</option>
             ))}
           </select>
           <div className="input-group">
@@ -135,7 +141,7 @@ export default function CreateTransaction() {
           </div>
         </div>
       </form>
-      <TransactionHistory></TransactionHistory>
+      <TransactionHistory walletId={walletId}></TransactionHistory>
     </div>
   );
 }
