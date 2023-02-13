@@ -11,9 +11,37 @@ import {
   getAllIncome,
   postTransaction,
   postNewIncome,
+  getAllTransaction,
+  getWalletTransaction,
 } from "../utils/endpoints";
 
 export default function CreateTransaction({ walletId }) {
+  ////////////////
+  const [walletTransaction, setWalletTransaction] = useState([]);
+
+  useEffect(() => {
+    if (walletId === undefined) {
+      axios
+        .get(getAllTransaction())
+        .then((response) => {
+          setWalletTransaction(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .get(getWalletTransaction(walletId))
+        .then((response) => {
+          setWalletTransaction(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, []);
+
+  ///////////////
   const [income, setIncomeHistory] = useState([]);
   const [name, setName] = useState();
   const [sum, setSum] = useState(0);

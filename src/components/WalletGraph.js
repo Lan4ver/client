@@ -120,7 +120,10 @@ const WalletGraph = ({ walletId }) => {
               </span>
             </h3>
           ) : (
-            <h3 className="mb-4 font-bold title" style={{ marginLeft: "10px" }}>
+            <h3
+              className="mb-4 font-bold title"
+              style={{ marginLeft: "110px" }}
+            >
               Expenses
               <span className="block text-3xl text-emerald-400">
                 -{outcome} $

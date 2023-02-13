@@ -52,3 +52,13 @@ export const getStatistic = () => {
 export const getIncome = (walletId) => {
   return `https://money-manager-228.herokuapp.com/income?walletId=${walletId}`;
 };
+export const getWalletTransaction = (walletId) => {
+  return `https://money-manager-228.herokuapp.com/statistic/transactions/all?dateFrom=${moment()
+    .startOf("month")
+    .toJSON()}&dateTo=${moment().endOf("month").toJSON()}&walletId=${walletId}`;
+};
+export const getAllTransaction = () => {
+  return `https://money-manager-228.herokuapp.com/statistic/transactions/all?dateFrom=${moment()
+    .startOf("month")
+    .toJSON()}&dateTo=${moment().endOf("month").toJSON()}`;
+};

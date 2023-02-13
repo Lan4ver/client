@@ -24,7 +24,7 @@ export default function FullHistory() {
   return (
     <div className="flex flex-col py-6 gap-3">
       <h1 className="py-4 text-md font-bold text-xl">History</h1>
-      <Scrollbars style={{ height: 750 }}>
+      <Scrollbars style={{ height: 400 }}>
         {fullHistory.map((v, i) => {
           return (
             <div className="py-1">
