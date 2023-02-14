@@ -1,13 +1,8 @@
-import WalletGraph from "./WalletGraph";
-import CreateTransaction from "./CreateTransaction";
-import TransactionHistory from "./TransactionHistory";
-import WalletComponent from "./WalletComponent";
 import WalletTab from "./WalletTab";
 import { Button } from "antd";
 import { logout } from "../data/actionCreators/authorizationActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { BarsOutlined } from "@ant-design/icons";
 import "./Home.css";
 import React from "react";
 

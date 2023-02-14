@@ -3,15 +3,8 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 import TransactionSummary from "./TransactionSummary";
 import axios from "axios";
-import { BarsOutlined } from "@ant-design/icons";
-import { Button, Space, Modal } from "antd";
-import ModalWrapper from "./Modal";
-import { useRef, useState, useEffect } from "react";
-import {
-  getAllFromWallets,
-  getWalletStatistic,
-  getAllStatistic,
-} from "../utils/endpoints";
+import { useState, useEffect } from "react";
+import { getAllFromWallets } from "../utils/endpoints";
 
 Chart.register(ArcElement);
 
@@ -61,8 +54,6 @@ const WalletGraph = ({ walletId, walletInfo }) => {
   }, []);
 
   const [doughnutConfig, setDoughnutConfig] = useState(config);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (walletInfo) {

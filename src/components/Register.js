@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { Button, Input, Tooltip } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

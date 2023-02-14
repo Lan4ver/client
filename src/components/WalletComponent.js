@@ -4,7 +4,7 @@ import "./Home.css";
 import React from "react";
 import ModalWrapper from "./Modal";
 import TransactionHistory from "./TransactionHistory";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   getWalletStatistic,
   getTotal,

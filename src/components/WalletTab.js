@@ -1,10 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Tabs, Modal, Button, Input } from "antd";
-import { BarsOutlined } from "@ant-design/icons";
-import Home from "./Home";
+import { Tabs, Modal, Input } from "antd";
 import WalletComponent from "./WalletComponent";
-import ModalWrapper from "./Modal";
-import WalletGraph from "./WalletGraph";
 import axios from "axios";
 import { postNewWallet, getAllWallets, deleteWallet } from "../utils/endpoints";
 

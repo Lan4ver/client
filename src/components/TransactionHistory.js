@@ -1,33 +1,11 @@
 import React from "react";
 import "boxicons";
-import { Button, Space, Modal, ColumnsType } from "antd";
-import { useRef, useState, useEffect, useReducer } from "react";
-import {
-  getTransaction,
-  getCostType,
-  getIncome,
-  deleteIncome,
-  deleteTransaction,
-} from "../utils/endpoints";
+import { Button } from "antd";
+import { deleteIncome, deleteTransaction } from "../utils/endpoints";
 import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
 export default function TransactionHistory({ walletTransactions }) {
-  const [costImage, setCostImage] = useState([]);
-  const CASH_IMAGE =
-    "https://rwzydhznyespratlabcw.supabase.co/storage/v1/object/public/images/cash.png";
-
-  useEffect(() => {
-    axios
-      .get(getCostType)
-      .then((response) => {
-        setCostImage(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
     <div className="flex flex-col py-6 gap-5">
       <h1 className=" text-md font-bold text-xl">History</h1>

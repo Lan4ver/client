@@ -1,26 +1,4 @@
 import React from "react";
-import axios from "axios";
-import { getStatistic, getCostType } from "../utils/endpoints";
-import { useRef, useState, useEffect } from "react";
-import { getAllFromWallets, getWalletStatistic } from "../utils/endpoints";
-
-const obj = [
-  {
-    type: "Savings",
-    color: "#f9c74f",
-    percent: 45,
-  },
-  {
-    type: "Investment",
-    color: "#f9c74f",
-    percent: 20,
-  },
-  {
-    type: "Expense",
-    color: "#f9c74f",
-    percent: 10,
-  },
-];
 
 export default function TransactionSummary({ walletInfo }) {
   return (
@@ -28,7 +6,6 @@ export default function TransactionSummary({ walletInfo }) {
       {walletInfo.map((v, i) => {
         return (
           <>
-            {/* {v?.name} */}
             <LabelComponent image={v.image} key={i} data={v}></LabelComponent>
           </>
         );
