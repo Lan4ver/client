@@ -4,8 +4,6 @@ import WalletComponent from "./WalletComponent";
 import axios from "axios";
 import { postNewWallet, getAllWallets, deleteWallet } from "../utils/endpoints";
 
-const { confirm } = Modal;
-
 const initialItems = [
   {
     /*label: "Tab 1", children: "Content of Tab 1", key: "1"*/
@@ -124,7 +122,7 @@ function WalletTab() {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title="Name wallet"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

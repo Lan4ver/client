@@ -1,17 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import TransactionHistory from "./TransactionHistory";
-import { DatePickerProps } from "antd";
-import { Button, Space, Cascader, DatePicker } from "antd";
+import { Button, Space, DatePicker } from "antd";
 import axios from "axios";
-import { useRef, useState, useEffect, useReducer } from "react";
-import {
-  getCostType,
-  getAllIncome,
-  postTransaction,
-  postNewIncome,
-} from "../utils/endpoints";
+import { useState, useEffect } from "react";
+import { getCostType, getAllIncome } from "../utils/endpoints";
 
 export default function CreateTransaction({
   walletId,
@@ -24,8 +15,6 @@ export default function CreateTransaction({
   const [date, setDate] = useState("");
   const [costTypeId, setCostTypeId] = useState();
   const [costTypeName, setCostTypeName] = useState();
-
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     axios

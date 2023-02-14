@@ -62,31 +62,31 @@ export default function WalletComponent({ wallet }) {
     }
   };
 
-  // const [deleteIncomeTransaction, setDeleteIncomeTransaction] = useState([]);
-  // const [deleteCostTransaction, setDeleteCostTransaction] = useState([]);
-
-  // const deleteTransaction = (
-  //   category,
-  //   setDeleteIncomeTransaction,
-  //   setDeleteCostTransaction
-  // ) => {
-  //   setDeleteIncomeTransaction = axios
-  //     .delete(deleteIncome(category.transactionId))
-  //     .then((res) => {
-  //       getAllData();
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //   setDeleteCostTransaction = axios
-  //     .delete(deleteTransaction(category.transactionId))
-  //     .then((res) => {
-  //       getAllData();
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  const deleteOneOfTransactions = (
+    category,
+    transactionType,
+    transactionId
+  ) => {
+    if (transactionType === "income") {
+      axios
+        .delete(deleteIncome(category.transactionId))
+        .then((res) => {
+          getAllData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (transactionType === "cost") {
+      axios
+        .delete(deleteTransaction(category.transactionId))
+        .then((res) => {
+          getAllData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
 
   const [walletTransactions, setWalletTransactions] = useState([]);
   const [allWalletTransactions, setAllWalletTransactions] = useState([]);
@@ -161,6 +161,7 @@ export default function WalletComponent({ wallet }) {
             />
             <TransactionHistory
               walletTransactions={walletTransactions}
+              deleteOneOfTransactions={deleteOneOfTransactions}
             ></TransactionHistory>
           </div>
           <div className="global-graph-container">
@@ -170,7 +171,10 @@ export default function WalletComponent({ wallet }) {
           </div>
           <div style={{ paddingTop: "0px" }}>
             <ModalWrapper buttonText="Full History Statistics">
-              <TransactionHistory walletTransactions={allWalletTransactions} />
+              <TransactionHistory
+                walletTransactions={allWalletTransactions}
+                deleteOneOfTransactions={deleteOneOfTransactions}
+              />
             </ModalWrapper>
           </div>
         </div>

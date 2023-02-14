@@ -1,11 +1,12 @@
 import React from "react";
 import "boxicons";
 import { Button } from "antd";
-import { deleteIncome, deleteTransaction } from "../utils/endpoints";
-import axios from "axios";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
-export default function TransactionHistory({ walletTransactions }) {
+export default function TransactionHistory({
+  walletTransactions,
+  deleteOneOfTransactions,
+}) {
   return (
     <div className="flex flex-col py-6 gap-5">
       <h1 className=" text-md font-bold text-xl">History</h1>
@@ -14,6 +15,7 @@ export default function TransactionHistory({ walletTransactions }) {
           return (
             <div className="py-1">
               <Transaction
+                deleteOneOfTransactions={deleteOneOfTransactions}
                 image={v.typeImage}
                 key={i}
                 category={v}
@@ -26,18 +28,14 @@ export default function TransactionHistory({ walletTransactions }) {
   );
 }
 
-export function Transaction({ category, image }) {
-  const Delete = () => {
-    console.log(category);
-    if (category.transactionType === "income") {
-      axios.delete(deleteIncome(category.transactionId)).catch((error) => {
-        console.error(error);
-      });
-    } else {
-      axios.delete(deleteTransaction(category.transactionId)).catch((error) => {
-        console.error(error);
-      });
-    }
+export function Transaction({ category, image, deleteOneOfTransactions }) {
+  console.log(deleteOneOfTransactions);
+  const Delete = (data) => {
+    deleteOneOfTransactions(
+      category,
+      category.transactionType,
+      category.transactionId
+    );
   };
 
   if (!category) return null;
@@ -54,11 +52,7 @@ export function Transaction({ category, image }) {
       <img src={image} style={{ width: "30px", height: "100%" }}></img>
       <span>{category.name ?? ""}</span>
       <span>{category.amount + "$"}</span>
-      <Button
-        onClick={() => {
-          Delete();
-        }}
-      >
+      <Button onClick={Delete}>
         <box-icon
           color={category.color ?? "#f9c74f"}
           size="15px"
