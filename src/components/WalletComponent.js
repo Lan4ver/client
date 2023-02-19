@@ -1,6 +1,5 @@
 import WalletGraph from "./WalletGraph";
 import CreateTransaction from "./CreateTransaction";
-import "./Home.css";
 import React from "react";
 import ModalWrapper from "./Modal";
 import TransactionHistory from "./TransactionHistory";
@@ -15,6 +14,7 @@ import {
   getAllStatistic,
   deleteIncome,
   deleteTransaction,
+  getAllFromWallets,
 } from "../utils/endpoints";
 import axios from "axios";
 
@@ -94,6 +94,9 @@ export default function WalletComponent({ wallet }) {
   const [walletInfo, setWalletInfo] = useState([]);
   const [allWalletInfo, setAllWalletInfo] = useState([]);
 
+  const [outcome, setOutcome] = useState();
+  const [allOutcome, setAllOutcome] = useState();
+
   const getAllData = () => {
     axios
       .get(getAllTransaction())
@@ -129,10 +132,6 @@ export default function WalletComponent({ wallet }) {
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  useEffect(() => {
-    getAllData();
     axios
       .get(getTotal)
       .then((response) => {
@@ -141,6 +140,24 @@ export default function WalletComponent({ wallet }) {
       .catch((error) => {
         console.error(error);
       });
+    axios
+      .get(getAllFromWallets)
+      .then((response) => {
+        let AllWalletOutcome = 0;
+        response.data.forEach((element) => {
+          AllWalletOutcome += element.outcome;
+        });
+        setAllOutcome(AllWalletOutcome);
+        let summary = response.data.find((x) => x.walletId === wallet.walletId);
+        setOutcome(summary.outcome);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getAllData();
   }, []);
 
   return (
@@ -153,7 +170,11 @@ export default function WalletComponent({ wallet }) {
           </span>
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
-          <WalletGraph walletId={wallet.walletId} walletInfo={walletInfo} />
+          <WalletGraph
+            walletId={wallet.walletId}
+            walletInfo={walletInfo}
+            outcome={outcome}
+          />
           <div className="form max-w-sm mx-auto w-96">
             <CreateTransaction
               walletId={wallet.walletId}
@@ -166,7 +187,7 @@ export default function WalletComponent({ wallet }) {
           </div>
           <div className="global-graph-container">
             <ModalWrapper buttonText="Full Wallet Statistics">
-              <WalletGraph walletInfo={allWalletInfo} />
+              <WalletGraph walletInfo={allWalletInfo} outcome={allOutcome} />
             </ModalWrapper>
           </div>
           <div style={{ paddingTop: "0px" }}>

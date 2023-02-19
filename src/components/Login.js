@@ -42,6 +42,7 @@ const Login = ({ login }) => {
       >
         LOGIN
       </Button>
+      <h3>Don't have an account? Create new by pressing sign up</h3>
       <Button
         type="primary"
         block

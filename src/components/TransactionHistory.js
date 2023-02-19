@@ -29,7 +29,6 @@ export default function TransactionHistory({
 }
 
 export function Transaction({ category, image, deleteOneOfTransactions }) {
-  console.log(deleteOneOfTransactions);
   const Delete = (data) => {
     deleteOneOfTransactions(
       category,

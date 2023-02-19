@@ -30,29 +30,7 @@ const options = {
   },
 };
 
-const WalletGraph = ({ walletId, walletInfo }) => {
-  const [outcome, setOutcome] = useState();
-
-  useEffect(() => {
-    axios
-      .get(getAllFromWallets)
-      .then((response) => {
-        if (walletId === undefined) {
-          let allOutcome = 0;
-          response.data.forEach((element) => {
-            allOutcome += element.outcome;
-          });
-          setOutcome(allOutcome);
-        } else {
-          let wallet = response.data.find((x) => x.walletId === walletId);
-          setOutcome(wallet.outcome);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
+const WalletGraph = ({ walletId, walletInfo, outcome }) => {
   const [doughnutConfig, setDoughnutConfig] = useState(config);
 
   useEffect(() => {
@@ -102,7 +80,6 @@ const WalletGraph = ({ walletId, walletInfo }) => {
           )}
         </div>
         <div className="flex flex-col py-10 gap-4">
-          {/* {labels} */}
           <TransactionSummary walletInfo={walletInfo}></TransactionSummary>
         </div>
       </div>

@@ -3,7 +3,6 @@ import { Button } from "antd";
 import { logout } from "../data/actionCreators/authorizationActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import "./Home.css";
 import React from "react";
 
 const Home = ({ logout }) => {
@@ -19,7 +18,7 @@ const Home = ({ logout }) => {
           onClick={() => {
             logout();
           }}
-          className="logout-button"
+          className="margin-top: 20px"
           type="primary"
           danger
         >

@@ -45,6 +45,7 @@ const Register = () => {
             })
             .catch((error) => {
               console.log(error);
+              return <h1>User already exist</h1>;
             });
         }}
         block
@@ -52,6 +53,7 @@ const Register = () => {
       >
         Register
       </Button>
+      <h3>Already have an account? Sign in</h3>
       <Button
         type="primary"
         block
