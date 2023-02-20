@@ -1,7 +1,6 @@
 import WalletTab from "./WalletTab";
 import { Button } from "antd";
 import { logout } from "../data/actionCreators/authorizationActions";
-import Coci4Len from "./PystBydet";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import React from "react";
@@ -40,5 +39,3 @@ export default connect(
   },
   { logout }
 )(Home);
-
-Coci4Len = 0;
