@@ -2,9 +2,7 @@ import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 import TransactionSummary from "./TransactionSummary";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { getAllFromWallets } from "../utils/endpoints";
 
 Chart.register(ArcElement);
 

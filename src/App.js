@@ -8,12 +8,7 @@ import store from "./data/store";
 import setAuthorizationToken from "./utils/setAuthorizationToken";
 import { setCurrentUser } from "./data/actionCreators/authorizationActions";
 import { Provider } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   var token = localStorage.getItem("jwtToken");
