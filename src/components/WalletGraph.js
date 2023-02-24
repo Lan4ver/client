@@ -62,7 +62,7 @@ const WalletGraph = ({ walletId, walletInfo, outcome }) => {
             <h3 className="mb-4 font-bold title">
               Expenses
               <span className="block text-3xl text-emerald-400">
-                -{outcome} $
+                -{outcome} zł
               </span>
             </h3>
           ) : (
