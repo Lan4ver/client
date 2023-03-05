@@ -14,7 +14,6 @@ import {
   getAllStatistic,
   deleteIncome,
   deleteTransaction,
-  getAllFromWallets,
 } from "../utils/endpoints";
 import axios from "axios";
 
@@ -119,6 +118,11 @@ export default function WalletComponent({ wallet }) {
       .get(getAllStatistic())
       .then((response) => {
         setAllWalletInfo(response.data);
+        let AllWalletOutcome = 0;
+        response.data.forEach((element) => {
+          AllWalletOutcome += element.amount;
+        });
+        setAllOutcome(AllWalletOutcome);
       })
       .catch((error) => {
         console.error(error);
@@ -128,6 +132,11 @@ export default function WalletComponent({ wallet }) {
       .get(getWalletStatistic(wallet.walletId))
       .then((response) => {
         setWalletInfo(response.data);
+        let WalletOutcome = 0;
+        response.data.forEach((element) => {
+          WalletOutcome += element.amount;
+        });
+        setOutcome(WalletOutcome);
       })
       .catch((error) => {
         console.error(error);
@@ -136,20 +145,6 @@ export default function WalletComponent({ wallet }) {
       .get(getTotal)
       .then((response) => {
         setTotalBalance(response.data.totalBalance);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    axios
-      .get(getAllFromWallets)
-      .then((response) => {
-        let AllWalletOutcome = 0;
-        response.data.forEach((element) => {
-          AllWalletOutcome += element.outcome;
-        });
-        setAllOutcome(AllWalletOutcome);
-        let summary = response.data.find((x) => x.walletId === wallet.walletId);
-        setOutcome(summary.outcome);
       })
       .catch((error) => {
         console.error(error);

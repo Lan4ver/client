@@ -141,6 +141,7 @@ function WalletTab() {
         items={items}
       ></Tabs>
       {items.length <= 0 ? <h1>Create your first Wallet</h1> : <></>}
+      {items.length <= 0 ? <h4>press plus button on the left side</h4> : <></>}
     </>
   );
 }
