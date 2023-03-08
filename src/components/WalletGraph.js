@@ -54,7 +54,9 @@ const WalletGraph = ({ walletId, walletInfo, outcome }) => {
   return (
     <div className="flex justify-content max-w-xs mx-auto">
       <div className="global-graph-container"></div>
-      {walletId !== undefined ? <h1 className="text-2xl">Statistic</h1> : null}
+      {walletId !== undefined ? (
+        <h1 className="text-2xl">Wallet Balance</h1>
+      ) : null}
       <div className="item">
         <div className="chart relative">
           <Doughnut {...doughnutConfig}></Doughnut>
