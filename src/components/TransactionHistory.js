@@ -50,7 +50,7 @@ export function Transaction({ category, image, deleteOneOfTransactions }) {
     >
       <img src={image} style={{ width: "30px", height: "100%" }}></img>
       <span>{category.name ?? ""}</span>
-      <span>{category.amount + "zł"}</span>
+      <span>{category.amount + " zł"}</span>
       <Button onClick={Delete}>
         <box-icon
           color={category.color ?? "#f9c74f"}
