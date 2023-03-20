@@ -3,10 +3,9 @@ MoneyManager web page
 Money manager application which allows users to track and plan their expenses using different type of categories
 Technologies: C#, Asp.Net, JavaScript, React.js, JSX, Redux, CSS, HTML
 
+Repository includ only client web page
 (Project under development)
 
-
-Repository includ only client web page
 
 ![image](https://user-images.githubusercontent.com/72601059/226449146-54e9e5fc-40ff-41b6-8f85-8bb69a95d64f.png)
 
