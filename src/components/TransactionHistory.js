@@ -10,7 +10,7 @@ export default function TransactionHistory({
   return (
     <div className="flex flex-col py-6 gap-5">
       <h1 className=" text-md font-bold text-xl">History</h1>
-      <Scrollbars style={{ height: 250 }}>
+      <Scrollbars style={{ height: 350 }}>
         {walletTransactions.map((v, i) => {
           return (
             <div className="py-1">

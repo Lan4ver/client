@@ -14,6 +14,7 @@ import {
   getAllStatistic,
   deleteIncome,
   deleteTransaction,
+  getAllFromWallets,
 } from "../utils/endpoints";
 import axios from "axios";
 
@@ -96,6 +97,8 @@ export default function WalletComponent({ wallet }) {
   const [outcome, setOutcome] = useState();
   const [allOutcome, setAllOutcome] = useState();
 
+  const [singleWalletBalance, setSingleWalletBalance] = useState();
+
   const getAllData = () => {
     axios
       .get(getAllTransaction())
@@ -105,6 +108,7 @@ export default function WalletComponent({ wallet }) {
       .catch((error) => {
         console.error(error);
       });
+
     axios
       .get(getWalletTransaction(wallet.walletId))
       .then((response) => {
@@ -141,6 +145,7 @@ export default function WalletComponent({ wallet }) {
       .catch((error) => {
         console.error(error);
       });
+
     axios
       .get(getTotal)
       .then((response) => {
@@ -149,6 +154,16 @@ export default function WalletComponent({ wallet }) {
       .catch((error) => {
         console.error(error);
       });
+
+    axios
+      .get(getAllFromWallets)
+      .then((response) => {
+        setSingleWalletBalance(response.data.balance);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    console.log(singleWalletBalance);
   };
 
   useEffect(() => {
