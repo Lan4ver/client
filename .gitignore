@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# workflows
+/.github
+
+# endpoints
+/.endpoints
+
 # dependencies
 /node_modules
 /.pnp
