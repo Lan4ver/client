@@ -150,6 +150,7 @@ export default function WalletComponent({ wallet }) {
       .get(getTotal)
       .then((response) => {
         setTotalBalance(response.data.totalBalance);
+        //console.log(response.data.totalBalance);
       })
       .catch((error) => {
         console.error(error);
@@ -158,12 +159,13 @@ export default function WalletComponent({ wallet }) {
     axios
       .get(getAllFromWallets)
       .then((response) => {
-        setSingleWalletBalance(response.data.balance);
+        setSingleWalletBalance(
+          response.data.find((i) => i.walletId === wallet.walletId).balance
+        );
       })
       .catch((error) => {
         console.error(error);
       });
-    console.log(singleWalletBalance);
   };
 
   useEffect(() => {
@@ -184,6 +186,7 @@ export default function WalletComponent({ wallet }) {
             walletId={wallet.walletId}
             walletInfo={walletInfo}
             outcome={outcome}
+            singleWalletBalance={singleWalletBalance}
           />
           <div className="form max-w-sm mx-auto w-96">
             <CreateTransaction

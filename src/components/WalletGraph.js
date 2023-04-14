@@ -28,7 +28,12 @@ const options = {
   },
 };
 
-const WalletGraph = ({ walletId, walletInfo, outcome }) => {
+const WalletGraph = ({
+  walletId,
+  walletInfo,
+  outcome,
+  singleWalletBalance,
+}) => {
   const [doughnutConfig, setDoughnutConfig] = useState(config);
 
   useEffect(() => {
@@ -54,32 +59,21 @@ const WalletGraph = ({ walletId, walletInfo, outcome }) => {
   return (
     <div className="flex justify-content max-w-xs mx-auto">
       <div className="global-graph-container"></div>
-      {/* {walletId !== undefined ? (
-        <h2 className="text-2xl">
-          Wallet Balance <br></br>{" "}
-        </h2>
-      ) : null} */}
+      {walletId !== undefined ? (
+        <h3 className="mb-4 font-bold title" style={{ textAlign: "center" }}>
+          Wallet Balance
+          <span className="block text-2xl text-emerald-500">
+            {singleWalletBalance}zł
+          </span>
+        </h3>
+      ) : null}
       <div className="item">
         <div className="chart relative">
           <Doughnut {...doughnutConfig}></Doughnut>
-          {walletId !== undefined ? (
-            <h3 className="mb-4 font-bold title">
-              Expenses
-              <span className="block text-3xl text-emerald-400">
-                -{outcome} zł
-              </span>
-            </h3>
-          ) : (
-            <h3
-              className="mb-4 font-bold title"
-              style={{ marginLeft: "110px" }}
-            >
-              Expenses
-              <span className="block text-3xl text-emerald-400">
-                -{outcome} zł
-              </span>
-            </h3>
-          )}
+          <h3 className="mb-4 font-bold title" style={{ textAlign: "center" }}>
+            Expenses
+            <span className="block text-3xl text-red-500">-{outcome} zł</span>
+          </h3>
         </div>
         <div className="flex flex-col py-10 gap-4">
           <TransactionSummary walletInfo={walletInfo}></TransactionSummary>
